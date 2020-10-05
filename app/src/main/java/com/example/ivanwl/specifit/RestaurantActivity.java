@@ -43,6 +43,7 @@ public class RestaurantActivity extends AppCompatActivity implements RestaurantC
     private HashMap<String, Object> settings;
     private HashSet<String> favoriteRestaurants;
     private HashSet<Hit> selectedItems = new HashSet<>();
+    private HashMap<String, Integer> word_count;
     private Date dateTime;
 
     @Override
@@ -80,6 +81,7 @@ public class RestaurantActivity extends AppCompatActivity implements RestaurantC
         restaurantID = extras.getString("Restaurant_ID");
         favoriteRestaurants = (HashSet<String>) extras.getSerializable("Favorite_Restaurants");
         settings = (HashMap<String, Object>) extras.getSerializable("Settings");
+        word_count = (HashMap<String, Integer>) extras.getSerializable("word_count");
         setTitle(restaurantName);
 
         TextView textView = findViewById(R.id.content);
@@ -98,6 +100,24 @@ public class RestaurantActivity extends AppCompatActivity implements RestaurantC
         startActivity(intent);
     }
 
+    //  Restaurant Comparison for sorting restaurantList
+    //  Sort by Favorites, then by distance
+    private int compareFoodItems(Hit f1, Hit f2) {
+        int f1_count = 0;
+        int f2_count = 0;
+
+        for(String word : f1.fields.item_name.replaceAll(",", "").split("\\s+")) {
+            f1_count += word_count.getOrDefault(word, 0);
+        }
+        for(String word : f2.fields.item_name.replaceAll(",", "").split("\\s+")) {
+            f2_count += word_count.getOrDefault(word, 0);
+        }
+
+        if(f2_count > f1_count) return 1;
+        if(f2_count < f1_count) return -1;
+        return 0;
+    }
+
 
     //  Update Menu Items passed from /search
     @Override
@@ -106,6 +126,7 @@ public class RestaurantActivity extends AppCompatActivity implements RestaurantC
             Snackbar.make(this.findViewById(android.R.id.content), "You are reaching your daily calorie limit!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         ListView listView = findViewById(R.id.dishListview);
+        foodItems.sort((f1, f2) -> compareFoodItems(f1, f2));
         DishArrayAdapter adapter = new DishArrayAdapter(this, foodItems, selectedItems);
 
         listView.setAdapter(adapter);

@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainCallBack {
         Intent intent = new Intent(this, RestaurantsActivity.class);
         intent.putExtra("Settings", settings);
         intent.putExtra("mealsEaten", allMeals);
+        intent.putExtra("word_count", word_count);
         startActivity(intent);
     }
 

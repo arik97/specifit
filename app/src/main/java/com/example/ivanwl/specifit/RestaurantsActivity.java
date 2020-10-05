@@ -45,6 +45,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
     private HashSet<String> favoriteRestaurants;
     private ArrayList<Dish> mealsEaten;
     private HashSet<String> visitedRestaurants;
+    private HashMap<String, Integer> word_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         Bundle extras = getIntent().getExtras();
         settings = (HashMap<String, Object>) extras.getSerializable("Settings");
         mealsEaten = (ArrayList<Dish>) extras.getSerializable("mealsEaten");
+        word_count = (HashMap<String, Integer>) extras.getSerializable("word_count");
         for (Dish dish : mealsEaten){
             visitedRestaurants.add(dish.restaurant);
         }
@@ -122,6 +124,7 @@ public class RestaurantsActivity extends AppCompatActivity implements Restaurant
         intent.putExtra("Restaurant_ID", restaurants.get(index).brand_id);
         intent.putExtra("Favorite_Restaurants", favoriteRestaurants);
         intent.putExtra("Settings", settings);
+        intent.putExtra("word_count", word_count);
         startActivity(intent);
     }
 
