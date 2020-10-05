@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainCallBack {
         for (Map.Entry<Date, ArrayList<Dish>> meal : meals.entrySet()) {
             for (Dish dish : meal.getValue()) {
                 this.allMeals.add(dish);
-                if (this.dateTime != null && this.dateTime.getDate() == meal.getKey().getDate()){
+                if (this.dateTime != null && this.dateTime.getDate() == meal.getKey().getDate() && this.dateTime.getMonth() == meal.getKey().getMonth() && this.dateTime.getYear() == meal.getKey().getYear()){
                     // make a listview of meals
                     print("Date: " + meal.getKey().toString() + ": " + dish.name + ", " + dish.calories);
                     mealsEaten.add(dish);
