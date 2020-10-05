@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MainCallBack {
     private Date dateTime;
     private ArrayList<Dish> mealsEaten;
     private ArrayList<Dish> allMeals;
+    private HashMap<String, Integer> word_count;
 
     @Override
     protected void onResume() {
@@ -153,10 +154,14 @@ public class MainActivity extends AppCompatActivity implements MainCallBack {
     public void retrieveMeals(HashMap<Date, ArrayList<Dish>> meals) {
         this.mealsEaten = new ArrayList<>();
         this.allMeals = new ArrayList<>();
+        this.word_count = new HashMap<>();
         ((CalorieCounter) getApplication()).setConsumed(0.0);
         for (Map.Entry<Date, ArrayList<Dish>> meal : meals.entrySet()) {
             for (Dish dish : meal.getValue()) {
                 this.allMeals.add(dish);
+                for(String word : dish.name.replaceAll(",", "").split("\\s+")) {
+                    this.word_count.put(word, this.word_count.getOrDefault(word, 0) + 1);
+                }
                 if (this.dateTime != null && this.dateTime.getDate() == meal.getKey().getDate() && this.dateTime.getMonth() == meal.getKey().getMonth() && this.dateTime.getYear() == meal.getKey().getYear()){
                     // make a listview of meals
                     print("Date: " + meal.getKey().toString() + ": " + dish.name + ", " + dish.calories);
